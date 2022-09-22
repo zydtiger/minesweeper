@@ -1,0 +1,15 @@
+{
+  "name": "minesweeper",
+  "version": "1.0.0",
+  "main": "app.js",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.1",
+    "serve-handler": "^6.1.3"
+  },
+  "scripts": {
+    "start": "node .",
+    "build": "tsc -p . & browserify src/build/index.js -o bundle.js & lessc src/less/style.less style.css",
+    "less": "lessc src/less/style.less style.css"
+  }
+}
