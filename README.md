@@ -1,5 +1,5 @@
 # Cool & Simple Minesweeper Game with Commands 💣
----
+
 ## How to start
 1. make sure the node environment is installed, requiring `node`, `yarn` suggested
 2. install the node_modules
