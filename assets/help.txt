@@ -1,5 +1,5 @@
-spawn ${w} ${h}
-- spawn the grid with the corresponding width / height
+spawn ${w}? ${h}? ${mine}?
+- spawn the grid with the corresponding width / height / mine. If less than 3 params, only the provided params would be updated
 
 reveal ${x}? ${y}?
 - reveals the designated coord or everything

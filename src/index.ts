@@ -14,12 +14,11 @@ window.exec = (cmd: string) => {
   try {
     let cmd_matches: { [key: string]: () => void } = {
       'spawn': () => {
-        if (cmd_parts.length != 4) throw SyntaxError("Wrong number of args!");
-        let w = parseInt(cmd_parts[1])
-        let h = parseInt(cmd_parts[2])
-        let m = parseInt(cmd_parts[3])
-        assert(() => !isNaN(w) && !isNaN(h) && !isNaN(m));
-        window.init(w, h, m)
+        if (cmd_parts.length > 4) throw SyntaxError("Wrong number of args!");
+        let w = parseInt(cmd_parts[1] || 'nan')
+        let h = parseInt(cmd_parts[2] || 'nan')
+        let m = parseInt(cmd_parts[3] || 'nan')
+        window.init(isNaN(w) ? undefined : w, isNaN(h) ? undefined : h, isNaN(m) ? undefined : m)
       },
       'reveal': () => {
         if (cmd_parts.length == 1) grid.revealAll()
@@ -126,6 +125,8 @@ function clearClickHooks() {
 }
 
 window.init = (width?: number, height?: number, mine?: number) => {
+  // console.log(width, height, mine); // ? param would be undefined is not provided
+
   /* clear */
   (document.getElementById('grid') as Element).innerHTML = "";
   (document.getElementById('cover_grid') as Element).innerHTML = "";
