@@ -55,7 +55,7 @@ class Grid {
                 if (this.map[i][j] != 0) {
                     let ninner = document.createElement('div');
                     let matched_style = {
-                        '-1': 'font-size: 25px',
+                        '-1': 'font-size: 20px',
                         '1': 'color: blue',
                         '2': 'color: green',
                         '3': 'color: red',
@@ -265,6 +265,13 @@ window.exec = (cmd) => {
         console.error(e);
     }
 };
+window.help = () => {
+    let popup_title = document.querySelector('#popup h1');
+    popup_title.innerHTML = "Docs";
+    popup_title.setAttribute('style', 'color: black');
+    document.querySelector('#popup iframe').setAttribute('style', 'display: block');
+    popup();
+};
 window.cmdKeyDown = (event, val) => {
     // console.log(event)
     if (event.code == "Enter") {
@@ -274,11 +281,12 @@ window.cmdKeyDown = (event, val) => {
 };
 function popup() {
     document.getElementById('popup-back').setAttribute('style', 'display: block');
-    document.getElementById('popup').setAttribute('style', 'display: block');
+    document.getElementById('popup').setAttribute('style', 'display: flex');
 }
 window.closePopup = () => {
     document.getElementById('popup-back').setAttribute('style', 'display: none');
     document.getElementById('popup').setAttribute('style', 'display: none');
+    document.querySelector('#popup iframe').setAttribute('style', 'display: none');
 };
 function initClickHooks() {
     window.clickCover = (x, y) => {

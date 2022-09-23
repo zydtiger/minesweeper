@@ -64,7 +64,7 @@ export class Grid {
         if (this.map[i][j] != 0) {
           let ninner = document.createElement('div')
           let matched_style: { [key: string]: string } = {
-            '-1': 'font-size: 25px',
+            '-1': 'font-size: 20px',
             '1': 'color: blue',
             '2': 'color: green',
             '3': 'color: red',

@@ -1,6 +1,7 @@
 declare global {
   interface Window {
     exec: (cmd: string) => void,
+    help: () => void,
     cmdKeyDown: (event: KeyboardEvent, val: string) => void,
     clickCover: (x: number, y: number) => void,
     rightclickCover: (event: MouseEvent, x: number, y: number) => void,

@@ -78,6 +78,16 @@ window.exec = (cmd: string) => {
 
 }
 
+window.help = () => {
+  let popup_title = document.querySelector('#popup h1') as Element;
+  popup_title.innerHTML = "Docs";
+  popup_title.setAttribute('style', 'color: black');
+
+  (document.querySelector('#popup iframe') as Element).setAttribute('style', 'display: block')
+
+  popup()
+}
+
 window.cmdKeyDown = (event: KeyboardEvent, val: string) => {
   // console.log(event)
   if (event.code == "Enter") {
@@ -88,12 +98,13 @@ window.cmdKeyDown = (event: KeyboardEvent, val: string) => {
 
 function popup() {
   (document.getElementById('popup-back') as Element).setAttribute('style', 'display: block');
-  (document.getElementById('popup') as Element).setAttribute('style', 'display: block');
+  (document.getElementById('popup') as Element).setAttribute('style', 'display: flex');
 }
 
 window.closePopup = () => {
   (document.getElementById('popup-back') as Element).setAttribute('style', 'display: none');
   (document.getElementById('popup') as Element).setAttribute('style', 'display: none');
+  (document.querySelector('#popup iframe') as Element).setAttribute('style', 'display: none')
 }
 
 function initClickHooks() {

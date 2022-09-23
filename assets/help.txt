@@ -1,0 +1,20 @@
+spawn ${w} ${h}
+- spawn the grid with the corresponding width / height
+
+reveal ${x}? ${y}?
+- reveals the designated coord or everything
+
+unreveal ${x}? ${y}?
+- unreveal the designated coord or everything
+
+tap ${x} ${y}
+- same as clicking the coord
+
+flag ${x} ${y}
+- same as flagging the coord
+
+starttimer
+- starts the game timer
+
+stoptimer
+- stops the game timer
