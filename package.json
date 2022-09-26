@@ -9,7 +9,8 @@
   },
   "scripts": {
     "start": "node .",
-    "build": "tsc -p . & browserify src/build/index.js -o bundle.js & lessc src/less/style.less style.css",
-    "less": "lessc src/less/style.less style.css"
+    "compilets": "tsc -p . && browserify src/build/index.js -o src/build/bundle.js && minify src/build/bundle.js > bundle.min.js",
+    "less": "lessc src/less/style.less src/build/style.css & minify src/build/style.css > style.min.css",
+    "build": "yarn compilets && yarn less"
   }
 }
