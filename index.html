@@ -25,8 +25,8 @@
     <div id="timer" class="numerical">0000</div>
   </div>
 
-  <div id="grid"></div>
-  <div id="cover_grid"></div>
+  <div id="grid" oncontextmenu="event.preventDefault()"></div>
+  <div id="cover_grid" oncontextmenu="event.preventDefault()"></div>
 
   <div id="popup-back" onclick="closePopup()"></div>
   <div id="popup">
@@ -39,7 +39,7 @@
   </div>
 
   <div id="command">
-    <input type="text" onkeydown="cmdKeyDown(event, this.value)" placeholder="Enter your command here..." name=""
+    <input type="text" onkeydown="cmdkeydown(event, this.value)" placeholder="Enter your command here..." name=""
       id="" />
     <div onclick="help()">
       <div class="fa fa-question-circle-o"></div>

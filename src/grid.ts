@@ -93,8 +93,7 @@ export class Grid {
       for (let j = 0; j < this.size.width; j++) {
         let nblock = document.createElement('div')
         nblock.setAttribute('class', 'cover')
-        nblock.setAttribute('onclick', `clickCover(${j}, ${i})`)
-        nblock.setAttribute('oncontextmenu', `rightclickCover(event, ${j}, ${i})`)
+        nblock.setAttribute('onmousedown', `mousedownCover(event, ${j}, ${i})`)
 
         let ninner = document.createElement('div')
         nblock.appendChild(ninner)
@@ -146,14 +145,15 @@ export class Grid {
   /* dfs function */
   private readonly dx: number[] = [-1, -1, -1, 0, 0, 1, 1, 1]
   private readonly dy: number[] = [-1, 0, 1, -1, 1, -1, 0, 1]
-
+  private _in_bound(pos: Position): boolean {
+    return pos.x >= 0 && pos.x < this.size.width && pos.y >= 0 && pos.y < this.size.height
+  }
   private _dfs_open(pos: Position) {
     for (let k = 0; k < this.dx.length; k++) {
       let npos = new Position(pos.x + this.dx[k], pos.y + this.dy[k])
-      if (npos.x < 0 || npos.x >= this.size.width || npos.y < 0 || npos.y >= this.size.height) continue;
+      if (!this._in_bound(npos)) continue;
       let cover = this.essentials.cover_grid.children[npos.y].children[npos.x]
-      if (cover.getAttribute('style') != null) continue;
-      if ((cover.firstChild as Element).innerHTML != "") continue;
+      if (cover.getAttribute('style') != null || (cover.firstChild as Element).innerHTML != "") continue;
       cover.setAttribute('style', 'opacity: 0')
       if (this.map[npos.y][npos.x] == 0) this._dfs_open(npos)
     }
@@ -161,6 +161,7 @@ export class Grid {
   tap(pos: Position) {
     let cover = this.essentials.cover_grid.children[pos.y].children[pos.x];
     if ((cover.firstChild as Element).innerHTML != "") {
+      /* remove the flag if flagged */
       (cover.firstChild as Element).innerHTML = ""
       this.essentials.mine_label.innerHTML = format(++this.unlabelled_mines)
       return
@@ -180,10 +181,42 @@ export class Grid {
 
     if (uncovered == this.total_mines) this.win()
   }
+  starttry(pos: Position) {
+    for (let k=0;k<this.dx.length;k++) {
+      let npos = new Position(pos.x + this.dx[k], pos.y + this.dy[k])
+      if (!this._in_bound(npos)) continue;
+      let ncover = this.essentials.cover_grid.children[npos.y].children[npos.x];
+      if (ncover.getAttribute('style') != null || (ncover.firstChild as Element).innerHTML != "") continue;
+      ncover.classList.add('plain')
+    }
+    return;
+  }
+  try(pos: Position) {
+    let ok = true
+    for (let k=0;k<this.dx.length;k++) {
+      let npos = new Position(pos.x + this.dx[k], pos.y + this.dy[k])
+      if (!this._in_bound(npos)) continue;
+      let ncover = this.essentials.cover_grid.children[npos.y].children[npos.x];
+      if (ncover.getAttribute('style') != null || (ncover.firstChild as Element).innerHTML != "") continue;
+      
+      if (this.map[npos.y][npos.x] == -1) { 
+        ok = false
+        break
+      }
+    }
+    
+    for (let k=0;k<this.dx.length;k++) {
+      let npos = new Position(pos.x + this.dx[k], pos.y + this.dy[k])
+      if (!this._in_bound(npos)) continue;
+      let ncover = this.essentials.cover_grid.children[npos.y].children[npos.x];
+      if (ncover.getAttribute('style') != null || (ncover.firstChild as Element).innerHTML != "") continue;
+      
+      if (ok) this.tap(npos)
+      else ncover.classList.remove('plain')
+    }
+  }
   flag(pos: Position) {
     let cover = this.essentials.cover_grid.children[pos.y].children[pos.x];
-    if (cover.getAttribute('style') != null) return;
-
     let target = cover.firstChild as Element;
     if (target.innerHTML == "") {
       target.innerHTML = this.icons.flag

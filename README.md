@@ -13,7 +13,7 @@ yarn start # defaults to 60001
 
 ## Rebuild after changes
 ```bash
-yarn build # rebuilds the bundle.js from ts and style.css from less
+yarn build:release # rebuilds the bundle.min.js from ts and style.min.css from less
 ```
 
 ## Demo

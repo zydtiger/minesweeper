@@ -1,7 +1,5 @@
 /node_modules
 /.vscode
 
-# build results
+# build cache
 /src/build
-/bundle.min.js
-/style.min.css

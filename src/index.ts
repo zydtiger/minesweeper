@@ -1,4 +1,4 @@
-import { sleep, Dimension, Position, randint, assert, format } from './lib'
+import { Dimension, Position, assert, format } from './lib'
 import { Grid, GameEssentials } from './grid'
 
 type TimeHandler = number;
@@ -44,6 +44,18 @@ window.exec = (cmd: string) => {
         assert(() => !isNaN(pos.x) && !isNaN(pos.y))
         grid.tap(pos)
       },
+      'starttry': () => {
+        if (cmd_parts.length != 3) throw SyntaxError("Wrong number of args!")
+        let pos = new Position(parseInt(cmd_parts[1]), parseInt(cmd_parts[2]));
+        assert(() => !isNaN(pos.x) && !isNaN(pos.y))
+        grid.starttry(pos);
+      },
+      'try': () => {
+        if (cmd_parts.length != 3) throw SyntaxError("Wrong number of args!")
+        let pos = new Position(parseInt(cmd_parts[1]), parseInt(cmd_parts[2]));
+        assert(() => !isNaN(pos.x) && !isNaN(pos.y))
+        grid.try(pos)
+      },
       'flag': () => {
         if (cmd_parts.length != 3) throw SyntaxError("Wrong number of args!")
         let pos = new Position(parseInt(cmd_parts[1]), parseInt(cmd_parts[2]));
@@ -87,11 +99,20 @@ window.help = () => {
   popup()
 }
 
-window.cmdKeyDown = (event: KeyboardEvent, val: string) => {
+window.cmdkeydown = (event: KeyboardEvent, val: string) => {
   // console.log(event)
   if (event.code == "Enter") {
     window.exec(val);
     (event.target as HTMLInputElement).value = ""
+  }
+}
+
+let cmd_cache: string = '';
+window.onmouseup = (event: MouseEvent) => {
+  event.preventDefault();
+  if (cmd_cache.length > 0) {
+    window.exec(cmd_cache)
+    cmd_cache = ''
   }
 }
 
@@ -107,21 +128,21 @@ window.closePopup = () => {
 }
 
 function initClickHooks() {
-  window.clickCover = (x: number, y: number) => {
-    // console.log(x, y)
-    window.exec(`tap ${x} ${y}`)
-  }
-
-  window.rightclickCover = (event: MouseEvent, x: number, y: number) => {
-    // console.log(event)
+  window.mousedownCover = (event: MouseEvent, x: number, y: number) => {
     event.preventDefault();
-    window.exec(`flag ${x} ${y}`)
+    if (event.button == 2 && (event.target as Element).getAttribute('style') == null) window.exec(`flag ${x} ${y}`)
+
+    if (event.button != 0) return;
+    if (!event.ctrlKey) window.exec(`tap ${x} ${y}`)
+    else {
+      cmd_cache = `try ${x} ${y}`
+      window.exec(`starttry ${x} ${y}`)
+    }
   }
 }
 
 function clearClickHooks() {
-  window.clickCover = () => { }
-  window.rightclickCover = () => { }
+  window.mousedownCover = () => { }
 }
 
 window.init = (width?: number, height?: number, mine?: number) => {

@@ -21,7 +21,6 @@ body {
   border-bottom: @px solid black;
   border-left: @px solid lightgray;
   background-color: @primarygray;
-  // border: @px outset lightgray;
 }
 
 .hovered-bevel {
@@ -118,6 +117,10 @@ body {
 
     &.reveal {
       opacity: 0.5;
+    }
+
+    &.plain {
+      .block();
     }
   }
 }
