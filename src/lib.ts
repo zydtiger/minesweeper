@@ -20,7 +20,7 @@ export class Position {
   }
 }
 
-export function randint(lb: number, ub: number) { // not inclusive
+export function rand_int(lb: number, ub: number) { // not inclusive
   return Math.floor(Math.random() * (ub - lb) + lb)
 }
 

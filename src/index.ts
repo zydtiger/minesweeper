@@ -1,3 +1,10 @@
+/**
+ * @author ZYD
+ * @date 2023/04/11
+ * Manages the window components
+ */
+
+
 import { Dimension, Position, assert, format } from './lib'
 import { Grid, GameEssentials } from './grid'
 
@@ -21,7 +28,7 @@ window.exec = (cmd: string) => {
         window.init(isNaN(w) ? undefined : w, isNaN(h) ? undefined : h, isNaN(m) ? undefined : m)
       },
       'reveal': () => {
-        if (cmd_parts.length == 1) grid.revealAll()
+        if (cmd_parts.length == 1) grid.reveal_all()
         else if (cmd_parts.length == 3) {
           let pos = new Position(parseInt(cmd_parts[1]), parseInt(cmd_parts[2]));
           assert(() => !isNaN(pos.x) && !isNaN(pos.y))
@@ -30,7 +37,7 @@ window.exec = (cmd: string) => {
         else throw SyntaxError("Wrong number of args!")
       },
       'unreveal': () => {
-        if (cmd_parts.length == 1) grid.unrevealAll()
+        if (cmd_parts.length == 1) grid.unreveal_all()
         else if (cmd_parts.length == 3) {
           let pos = new Position(parseInt(cmd_parts[1]), parseInt(cmd_parts[2]));
           assert(() => !isNaN(pos.x) && !isNaN(pos.y))
@@ -62,7 +69,7 @@ window.exec = (cmd: string) => {
         assert(() => !isNaN(pos.x) && !isNaN(pos.y))
         grid.flag(pos)
       },
-      'starttimer': () => {
+      'start_timer': () => {
         if (cmd_parts.length != 1) throw SyntaxError("Wrong number of args!");
 
         (document.getElementById('face-status') as Element).innerHTML = trailofwonder[0];
@@ -73,7 +80,7 @@ window.exec = (cmd: string) => {
           (document.getElementById('face-status') as Element).innerHTML = trailofwonder[Math.floor(secs / 60000)]
         }, 1000)
       },
-      'stoptimer': () => {
+      'stop_timer': () => {
         if (cmd_parts.length != 1) throw SyntaxError("Wrong number of args!")
         window.clearInterval(timer);
       }
@@ -100,7 +107,6 @@ window.help = () => {
 }
 
 window.cmdkeydown = (event: KeyboardEvent, val: string) => {
-  // console.log(event)
   if (event.code == "Enter") {
     window.exec(val);
     (event.target as HTMLInputElement).value = ""
@@ -146,7 +152,6 @@ function clearClickHooks() {
 }
 
 window.init = (width?: number, height?: number, mine?: number) => {
-  // console.log(width, height, mine); // ? param would be undefined is not provided
 
   /* clear */
   (document.getElementById('grid') as Element).innerHTML = "";
@@ -185,7 +190,7 @@ window.init = (width?: number, height?: number, mine?: number) => {
   grid = new Grid(new Dimension(last_width, last_height), last_mine, game_essentials);
   grid.render();
   grid.ongameover(() => {
-    window.exec('stoptimer')
+    window.exec('stop_timer')
     clearClickHooks()
 
     let popup_title = document.querySelector('#popup h1') as Element
@@ -195,7 +200,7 @@ window.init = (width?: number, height?: number, mine?: number) => {
     popup()
   });
   grid.onwin(() => {
-    window.exec('stoptimer')
+    window.exec('stop_timer')
     clearClickHooks()
 
     let popup_title = document.querySelector('#popup h1') as Element
@@ -206,7 +211,7 @@ window.init = (width?: number, height?: number, mine?: number) => {
   });
 
   initClickHooks();
-  window.exec('starttimer')
+  window.exec('start_timer')
 }
 
 window.onload = () => window.init()
